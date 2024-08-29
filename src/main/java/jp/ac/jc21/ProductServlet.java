@@ -15,11 +15,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Servlet implementation class IndexServlet
- */
-@WebServlet("/result1")
-public class Result1Servlet extends HttpServlet {
+@WebServlet("/product")
+public class ProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	final String dbServer = "192.168.54.231";
@@ -39,27 +36,55 @@ public class Result1Servlet extends HttpServlet {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(url, user, pass);
 
-			String sql = "SELECT item_id,item_name,price FROM Items " + "Where item_id = ?";
+			String sql = "SELECT MAKER_CODE,MAKER_NAME FROM MAKER";
+			String sql2 = "SELECT PRODUCT_CODE,PRODUCT_NAME,MAKER_CODE FROM PRODUCT ";
+			String sql3 = "SELECT PRODUCT_CODE,PRODUCT_NAME,MAKER_CODE FROM PRODUCT WHERE MAKER_CODE = ?";
 
 			PreparedStatement statement = conn.prepareStatement(sql);
-			
+			PreparedStatement statement2 = conn.prepareStatement(sql2);
+			PreparedStatement statement3 = conn.prepareStatement(sql3);
+
 			String id = request.getParameter("ID");
-			statement.setString(1, id);
+			statement3.setString(1, id);
 
 			ResultSet rs = statement.executeQuery();
+			ResultSet rs2 = statement2.executeQuery();
+			ResultSet rs3 = statement3.executeQuery();
 
-			ArrayList<String[]> result = new ArrayList<>();
+			ArrayList<String[]> maker = new ArrayList<>();
+			ArrayList<String[]> product = new ArrayList<>();
+			ArrayList<String[]> item = new ArrayList<>();
 
 			while (rs.next() == true) {
-				String[] s = new String[3];
-				s[0] = rs.getString("item_name");
-				s[1] = rs.getString("item_id");
-				s[2] = rs.getString("price");
-				result.add(s);
+				String[] s = new String[2];
+				s[0] = rs.getString("MAKER_CODE");
+				s[1] = rs.getString("MAKER_NAME");
+				maker.add(s);
 			}
-			request.setAttribute("result", result);
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/result1.jsp");
+
+			while (rs2.next() == true) {
+				String[] s2 = new String[3];
+				s2[0] = rs2.getString("PRODUCT_CODE");
+				s2[1] = rs2.getString("PRODUCT_NAME");
+				s2[2] = rs2.getString("MAKER_CODE");
+				product.add(s2);
+			}
+
+			while (rs3.next() == true) {
+				String[] s3 = new String[3];
+				s3[0] = rs3.getString("PRODUCT_CODE");
+				s3[1] = rs3.getString("PRODUCT_NAME");
+				s3[2] = rs3.getString("MAKER_CODE");
+				item.add(s3);
+			}
+
+			request.setAttribute("maker", maker);
+			request.setAttribute("product", product);
+			request.setAttribute("item", item);
+
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/product.jsp");
 			rd.forward(request, response);
+
 
 		} catch (SQLException e) {
 			e.printStackTrace();
