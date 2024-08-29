@@ -37,23 +37,29 @@ public class ProductServlet extends HttpServlet {
 			Connection conn = DriverManager.getConnection(url, user, pass);
 
 			String sql = "SELECT MAKER_CODE,MAKER_NAME FROM MAKER";
-			String sql2 = "SELECT PRODUCT_CODE,PRODUCT_NAME,MAKER_CODE FROM PRODUCT ";
-			String sql3 = "SELECT PRODUCT_CODE,PRODUCT_NAME,MAKER_CODE FROM PRODUCT WHERE MAKER_CODE = ?";
+			String sql2 = "SELECT PRODUCT.PRODUCT_CODE,PRODUCT.PRODUCT_NAME,PRODUCT.MAKER_CODE,MAKER.MAKER_NAME FROM PRODUCT INNER JOIN MAKER ON MAKER.MAKER_CODE = PRODUCT.MAKER_CODE";
 
 			PreparedStatement statement = conn.prepareStatement(sql);
 			PreparedStatement statement2 = conn.prepareStatement(sql2);
-			PreparedStatement statement3 = conn.prepareStatement(sql3);
-
-			String id = request.getParameter("ID");
-			statement3.setString(1, id);
+			
 
 			ResultSet rs = statement.executeQuery();
+			
+			
+			
+			String id = request.getParameter("ID");
+			
+			if(id != null) {
+				sql2 += " WHERE PRODUCT.MAKER_CODE = ?";
+				statement2 = conn.prepareStatement(sql2);		
+				statement2.setString(1, id);
+			}
+			
 			ResultSet rs2 = statement2.executeQuery();
-			ResultSet rs3 = statement3.executeQuery();
 
 			ArrayList<String[]> maker = new ArrayList<>();
 			ArrayList<String[]> product = new ArrayList<>();
-			ArrayList<String[]> item = new ArrayList<>();
+			
 
 			while (rs.next() == true) {
 				String[] s = new String[2];
@@ -66,22 +72,14 @@ public class ProductServlet extends HttpServlet {
 				String[] s2 = new String[3];
 				s2[0] = rs2.getString("PRODUCT_CODE");
 				s2[1] = rs2.getString("PRODUCT_NAME");
-				s2[2] = rs2.getString("MAKER_CODE");
+				s2[2] = rs2.getString("MAKER_NAME");
 				product.add(s2);
 			}
 
-			while (rs3.next() == true) {
-				String[] s3 = new String[3];
-				s3[0] = rs3.getString("PRODUCT_CODE");
-				s3[1] = rs3.getString("PRODUCT_NAME");
-				s3[2] = rs3.getString("MAKER_CODE");
-				item.add(s3);
-			}
-
+			
 			request.setAttribute("maker", maker);
 			request.setAttribute("product", product);
-			request.setAttribute("item", item);
-
+			
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/product.jsp");
 			rd.forward(request, response);
 

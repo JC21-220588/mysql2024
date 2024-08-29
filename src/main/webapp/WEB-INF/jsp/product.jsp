@@ -13,11 +13,12 @@ ArrayList<String[]> maker = (ArrayList<String[]>) request.getAttribute("maker");
 
 ArrayList<String[]> product = (ArrayList<String[]>) request.getAttribute("product");
 
-ArrayList<String[]> item = (ArrayList<String[]>) request.getAttribute("item");
+//ArrayList<String[]> item = (ArrayList<String[]>) request.getAttribute("item");
 
 %>
 <body>
 
+	<h1>メーカー一覧</h1>
 	<FORM METHOD="GET" ACTION="./product">
 		<SELECT NAME="ID">
 
@@ -33,37 +34,25 @@ ArrayList<String[]> item = (ArrayList<String[]>) request.getAttribute("item");
 			%>
 		</SELECT> <INPUT TYPE="SUBMIT" VALUE="絞り込む" />
 
+		<h1>商品一覧</h1>
 
-	<% String id = request.getParameter("ID");
+		<table border="3" style="border-style: double;">
 
-       if(id == null){		%>
-       
-		<table>
-	<%	for (String[] ss : product) {	%>
-	
+			<%
+			for (String[] ss : product) {
+			%>
+
 			<tr>
 				<th><%=ss[0]%></th>
 				<td><%=ss[1]%></td>
 				<td><%=ss[2]%></td>
 			</tr>
-	<%	}	%>
-	
+			<%
+			}
+			%>
+
 		</table>
-	<%}else{ %>
-	
-	    <table>
-	<%	for (String[] ss : item) {	%>
-	
-			<tr>
-				<th><%=ss[0]%></th>
-				<td><%=ss[1]%></td>
-				<td><%=ss[2]%></td>
-			</tr>
-	<%
-	     }
-	}
-	%>
-		</table>
+
 
 	</FORM>
 </body>
