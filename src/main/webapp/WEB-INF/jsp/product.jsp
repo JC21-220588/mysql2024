@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>JK3B10 </title>
+<title>JK3B10</title>
 </head>
 
 <%
