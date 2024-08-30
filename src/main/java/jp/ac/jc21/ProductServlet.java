@@ -82,7 +82,8 @@ public class ProductServlet extends HttpServlet {
 			
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/product.jsp");
 			rd.forward(request, response);
-
+			
+			conn.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();

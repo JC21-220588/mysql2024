@@ -17,12 +17,12 @@ ArrayList<String[]> result = (ArrayList<String[]>) request.getAttribute("result"
 
 
 		<% for (String[] ss : result) { %>
-			<OPTION VALUE="<%=ss[1]%>">
-				<%=ss[0]%>
-			</OPTION>
+		<OPTION VALUE="<%=ss[1]%>">
+			<%=ss[0]%>
+		</OPTION>
 		<% } %>
-		
-		
+
+
 	</SELECT>
 </body>
 </html>
