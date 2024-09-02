@@ -19,7 +19,7 @@ ArrayList<String[]> product = (ArrayList<String[]>) request.getAttribute("produc
 <body>
 
 	<h1>メーカー一覧</h1>
-	<FORM METHOD="GET" ACTION="./product">
+	<FORM METHOD="GET" ACTION="./item">
 		<SELECT NAME="ID">
 
 
